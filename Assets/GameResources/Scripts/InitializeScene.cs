@@ -11,6 +11,7 @@ public class InitializeScene : MonoBehaviour
     [SerializeField] private SoundController soundController = null;
     [SerializeField] private MusicController musicController = null;
     [SerializeField] private SettingsFacade settingsFacade = null;
+    [SerializeField] private CameraController cameraController = null;
 
     private void Awake()
     {
@@ -24,6 +25,7 @@ public class InitializeScene : MonoBehaviour
         shotController.Init();
         soundController.Init();
         musicController.Init();
-        settingsFacade.Init();
+        cameraController.Init();
+        settingsFacade.Init(musicController, cameraController);
     }
 }
