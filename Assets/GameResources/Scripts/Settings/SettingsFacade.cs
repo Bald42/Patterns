@@ -6,30 +6,32 @@ using Settings;
 /// </summary>
 public class SettingsFacade : MonoBehaviour
 {    
-    [SerializeField] private MusicController musicController = null;
-    private Camera mainCamera = null;
+    private MusicController musicController = null;
+    private CameraController cameraController = null;
 
-    public void Init()
+    public void Init(MusicController _musicController,
+                     CameraController _cameraController)
     {
-        mainCamera = Camera.main;
+        cameraController = _cameraController;
+        musicController = _musicController;
     }
 
     /// <summary>
     /// Устанавливаем громкость звуков
     /// </summary>
     /// <param name="volume"></param>
-    public void SetSoundValue(float volume)
+    public void SetSoundVolume(float volume)
     {
-        SettingsParametrs.SoundVolume = volume;
+        SettingsParametrs.SetSoundVolume(volume);
     }
 
     /// <summary>
     /// Устанавливаем громкость музыки
     /// </summary>
     /// <param name="volume"></param>
-    public void SetMusicValue(float volume)
+    public void SetMusicVolume(float volume)
     {
-        SettingsParametrs.MusicVolume = volume;
+        SettingsParametrs.SetMusicVolume(volume);
         musicController.SetMusicVolume();
     }
 
@@ -37,11 +39,10 @@ public class SettingsFacade : MonoBehaviour
     /// Устанавливаем дистанцию видимости камеры
     /// </summary>
     /// <param name="volume"></param>
-    public void SetCamDistance(float volume)
+    public void SetCamDistance(float value)
     {
-        SettingsParametrs.CamDistanceCurrent = (SettingsParametrs.CamDistanceMax - SettingsParametrs.CamDistanceMin) *
-                                                volume + SettingsParametrs.CamDistanceMin;
-        mainCamera.farClipPlane = SettingsParametrs.CamDistanceCurrent;
+        SettingsParametrs.SetCamDistance(value);
+        cameraController.SetCamDistance(SettingsParametrs.CamDistanceCurrent);
     }
 
     /// <summary>
@@ -50,20 +51,18 @@ public class SettingsFacade : MonoBehaviour
     /// <param name="isMute"></param>
     public void SetMute (bool isMute)
     {
-        SettingsParametrs.IsMute = isMute;
-        float soundValue = 0f;
-        float musicValue = 0f;
-        if (isMute)
-        {
-            SettingsParametrs.SoundVolumeOld = SettingsParametrs.SoundVolume;
-            SettingsParametrs.MusicVolumeOld = SettingsParametrs.MusicVolume;
-        }
-        else
-        {
-            soundValue = SettingsParametrs.SoundVolume = SettingsParametrs.SoundVolumeOld;
-            musicValue = SettingsParametrs.MusicVolume = SettingsParametrs.MusicVolumeOld;
-        }
-        SetSoundValue(soundValue);
-        SetMusicValue(musicValue);
+        SettingsParametrs.SetMute(isMute);
+        SetSoundVolume(SettingsParametrs.SoundVolume);
+        SetMusicVolume(SettingsParametrs.MusicVolume);
     }
+
+    /// <summary>
+    /// Устанавливаем качество графики
+    /// </summary>
+    /// <param name="qualityValue"></param>
+    public void SetChangeQuality(int qualityValue)
+    {
+        SettingsParametrs.QualityValue = qualityValue;
+        QualitySettings.SetQualityLevel(SettingsParametrs.QualityValue, true);
+    }    
 }

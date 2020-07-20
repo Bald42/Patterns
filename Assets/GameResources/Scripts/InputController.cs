@@ -28,7 +28,7 @@ public class InputController : MonoBehaviour
 
     private void OnClick()
     {
-        if (Input.mousePosition.y > Screen.height * 0.8)
+        if (Input.mousePosition.y > Screen.height * 0.9f)
         {
             return;
         }
