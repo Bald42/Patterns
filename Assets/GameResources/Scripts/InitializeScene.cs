@@ -12,20 +12,30 @@ public class InitializeScene : MonoBehaviour
     [SerializeField] private MusicController musicController = null;
     [SerializeField] private SettingsFacade settingsFacade = null;
     [SerializeField] private CameraController cameraController = null;
+    [SerializeField] private SoundShots soundShots = null;
+    private ShotObserver shotObserver = null;
 
     private void Awake()
     {
+        Create();
         InitAll();
+    }
+
+    private void Create()
+    {
+        shotObserver = new ShotObserver();
     }
 
     private void InitAll()
     {
         poolBullets.Init();
         inputController.Init();
-        shotController.Init();
+        shotController.Init(shotObserver);
         soundController.Init();
         musicController.Init();
         cameraController.Init();
         settingsFacade.Init(musicController, cameraController);
+        soundShots.Init(shotObserver);
+        shotObserver.Init(inputController);
     }
 }

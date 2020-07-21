@@ -5,38 +5,26 @@ using UnityEngine;
 /// <summary>
 /// Контроллер выстрелов
 /// </summary>
-public class ShotController : MonoBehaviour
+public class ShotController : MonoBehaviour, IShot
 {
     [SerializeField] Transform startShotPoint = null;
-    private IBulletFactory bulletFactory = null;
-    public void Init()
+    private ShotObserver shotObserver = null;
+
+    public void Init(ShotObserver _shotObserver)
     {
-        Subscribe();
+        shotObserver = _shotObserver;
+        shotObserver.AddObserver(this);
     }
 
-    #region Subscribes / UnSubscribes
-    /// <summary>Подписки</summary>
-    private void Subscribe()
+    private void OnDestroy()
     {
-        StaticActions.OnShotEvent += OnShot;
+        shotObserver.RemoveObserver(this);
     }
 
-    /// <summary>Отписки</summary>
-    private void UnSubscribe()
-    {
-        StaticActions.OnShotEvent -= OnShot;
-    }
-
-    private void OnShot(IBulletFactory bulletFactory, Vector3 direction)
+    void IShot.OnShot(IBulletFactory bulletFactory, Vector3 direction)
     {
         Bullet bullet = PoolBullets.Instance.GetBullet;
         bullet.SetParametrs(bulletFactory);
         bullet.FireBullet(startShotPoint.position, direction);
-    }
-    #endregion
-
-    private void OnDestroy()
-    {
-        UnSubscribe();
     }
 }
