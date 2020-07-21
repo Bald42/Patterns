@@ -5,43 +5,21 @@ using System.Collections.Generic;
 /// <summary>
 /// Обработка звуков выстрелов
 /// </summary>
-public class SoundShots : MonoBehaviour
+public class SoundShots : MonoBehaviour, IShot
 {
     [SerializeField] List<ItemsSounds> itemsSounds = new List<ItemsSounds>();
+    private ShotObserver shotObserver = null;
 
-    private void Awake()
+    public void Init(ShotObserver _shotObserver)
     {
-        Init();
-    }
-
-    private void Init()
-    {
-        Subscribe();
+        shotObserver = _shotObserver;
+        shotObserver.AddObserver(this);
     }
 
     private void OnDestroy()
     {
-        UnSubscribe();
+        shotObserver.RemoveObserver(this);
     }
-
-    #region Subscribes / UnSubscribes
-    /// <summary>Подписки</summary>
-    private void Subscribe()
-    {
-        StaticActions.OnShotEvent += OnShot;
-    }
-
-    /// <summary>Отписки</summary>
-    private void UnSubscribe()
-    {
-        StaticActions.OnShotEvent -= OnShot;
-    }
-
-    private void OnShot(IBulletFactory bulletFactory, Vector3 empty)
-    {
-        PlaySoundShot(bulletFactory);
-    }
-    #endregion
 
     private void PlaySoundShot(IBulletFactory bulletFactory)
     {
@@ -55,6 +33,11 @@ public class SoundShots : MonoBehaviour
                 break;
             }
         }
+    }
+
+    void IShot.OnShot(IBulletFactory bullet, Vector3 direction)
+    {
+        PlaySoundShot(bullet);
     }
 
     [Serializable]

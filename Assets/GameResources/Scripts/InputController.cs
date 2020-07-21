@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ using UnityEngine;
 /// </summary>
 public class InputController : MonoBehaviour
 {
+    public Action<IBulletFactory, Vector3> OnShotEvent = null;
+
     private bool isActive = false;
     private Camera camera = null;
 
@@ -60,6 +63,6 @@ public class InputController : MonoBehaviour
         mousePos.z = 10f;
         mousePos = camera.ScreenToWorldPoint(mousePos);
         Vector3 direction = mousePos - camera.transform.position;
-        StaticActions.OnShotEvent?.Invoke(bulletFactory, direction);
+        OnShotEvent?.Invoke(bulletFactory, direction);
     }
 }

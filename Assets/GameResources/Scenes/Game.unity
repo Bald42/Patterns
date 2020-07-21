@@ -3656,6 +3656,7 @@ MonoBehaviour:
   musicController: {fileID: 1685936830}
   settingsFacade: {fileID: 1112682277}
   cameraController: {fileID: 569819539}
+  soundShots: {fileID: 71018792}
 --- !u!1 &1267187368
 GameObject:
   m_ObjectHideFlags: 0
